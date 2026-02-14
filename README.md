@@ -1,54 +1,63 @@
 # Infrastructure Recommendation Prototype
 
-## Problem Statement
+## Overview
 
-Monitoring systems collect telemetry but require manual effort to derive actionable performance insights. This prototype converts database telemetry into deterministic infrastructure recommendations.
+This prototype demonstrates how PostgreSQL execution telemetry can be transformed into deterministic infrastructure performance recommendations.
 
-The system detects high-impact performance issues such as missing indexes and generates explainable recommendations based on real execution data.
+While monitoring platforms collect extensive metrics, users still manually derive optimization insights. This system bridges that gap by converting raw query telemetry into validated, explainable recommendations.
 
 ---
 
-## Architecture Overview
+## Problem Addressed
 
-The system consists of four layers:
+Database monitoring tools surface query performance metrics but do not proactively recommend optimizations such as missing index detection.
 
-1. **Workload Generator (Flask App)**  
-   Simulates real application traffic and database queries.
+This prototype identifies high-impact query patterns and generates actionable SQL recommendations based on:
 
-2. **Database (AWS RDS PostgreSQL)**  
-   Collects query execution telemetry using `pg_stat_statements`.
+- Query frequency
+- Cumulative execution time
+- Execution plan validation
+- Index existence verification
 
-3. **Recommendation Engine (Python)**  
-   Analyzes query frequency, cumulative execution time, execution plans, and index existence to generate recommendations.
+---
 
-4. **UI Mock (New Relic Integration Concept)**  
-   Demonstrates how recommendations would be surfaced within the Infrastructure Database entity view.
+## Architecture
+
+The system consists of four components:
+
+1. **Workload Generator (Flask)**
+   Simulates real application traffic.
+
+2. **PostgreSQL (AWS RDS)**
+   Collects execution telemetry using `pg_stat_statements`.
+
+3. **Recommendation Engine**
+   Applies multi-signal validation to detect optimization opportunities.
+
+4. **UI Integration Concept**
+   Demonstrates how recommendations would be surfaced within the Infrastructure → Database Entity view.
 
 ---
 
 ## How It Works
 
 1. Application traffic generates repeated database queries.
-2. PostgreSQL aggregates telemetry using `pg_stat_statements`.
-3. The engine detects:
-   - High query call frequency
-   - High cumulative execution time
-   - Sequential scan in execution plan
-   - Absence of relevant index
-4. A recommendation is generated with a confidence score.
-5. After applying the index, the system re-evaluates and suppresses false positives.
+2. Telemetry accumulates in `pg_stat_statements`.
+3. The engine evaluates execution behavior and infrastructure state.
+4. A recommendation is generated only when all validation conditions are met.
+5. After applying the fix, the system suppresses redundant recommendations.
 
 ---
 
-## How to Run
+## Running the Prototype
 
-### 1. Install dependencies
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Export environment variables
+Export environment variables:
 
 ```bash
 export DB_HOST="your-db-host"
@@ -57,13 +66,13 @@ export DB_USER="postgres"
 export DB_PASSWORD="your-password"
 ```
 
-### 3. Start workload generator
+Start workload generator:
 
 ```bash
 python app.py
 ```
 
-### 4. Run recommendation engine
+Run recommendation engine:
 
 ```bash
 python recommendation_engine.py
@@ -71,7 +80,9 @@ python recommendation_engine.py
 
 ---
 
-## Sample Output (Broken State)
+## Sample Output
+
+**Missing Index Detected**
 
 ```
 Infrastructure Recommendations:
@@ -83,9 +94,7 @@ Suggested Action: CREATE INDEX idx_orders_user_id ON orders(user_id);
 Confidence Score: 95%
 ```
 
----
-
-## Sample Output (After Fix)
+**After Index Creation**
 
 ```
 No actionable recommendations detected.
@@ -93,11 +102,7 @@ No actionable recommendations detected.
 
 ---
 
-## Key Design Principles
+## Additional Insights
 
-- Deterministic logic (no black-box AI)
-- Explainability
-- False positive prevention
-- Infrastructure-aware validation
-- Entity-centric integration model
+See `INFRASTRUCTURE_TELEMETRY_LEARNINGS.md` for detailed instrumentation challenges and key learnings.
 
