@@ -1,5 +1,8 @@
 # Infrastructure Recommendation Prototype
 
+Demo Video: <INSERT VIDEO LINK HERE>
+
+---
 ## Overview
 
 This prototype demonstrates how PostgreSQL execution telemetry can be transformed into deterministic infrastructure performance recommendations.
