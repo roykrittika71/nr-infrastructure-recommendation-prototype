@@ -1,6 +1,10 @@
 # Infrastructure Recommendation Prototype
 
-Demo Video: <INSERT VIDEO LINK HERE>
+## 🎥 Demo Video
+
+You can view the full prototype walkthrough here:
+
+🔗 https://www.loom.com/share/6d41b886e2a24d14b9468189af0fe59b
 
 ---
 ## Overview
